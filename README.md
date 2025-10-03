@@ -91,14 +91,15 @@ The AI will:
 - Document APIs and data models
 - Establish coding standards
 
-This creates **8 documentation files**:
+This creates **9 documentation files**:
 - `implementation_0_initial.md` - MVP task tracking
 - `architecture_decisions.md` - Why decisions were made
 - `api_contracts.md` - API schemas and interfaces
-- `coding_standards.md` - Code patterns with examples
+- `coding_standards.md` - Code patterns with examples (includes testing)
 - `project_structure.md` - File organization
 - `ui_ux.md` - Design system
 - `bug_tracking.md` - Error logging template
+- `git_workflow.md` - Version control workflow
 
 ### 4. Start Building
 
@@ -425,6 +426,8 @@ You: "Start working on notifications"
 | Know where files should go | `project_structure.md` |
 | Check design specs or UI components | `ui_ux.md` |
 | See if bug was encountered before | `bug_tracking.md` |
+| Understand git/commit workflow | `git_workflow.md` |
+| Verify documentation accuracy | Run "Check documentation health" |
 
 ---
 

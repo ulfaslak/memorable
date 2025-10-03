@@ -1,6 +1,8 @@
 # Coding Standards & Patterns
 
 > **Purpose:** Document project-specific patterns and conventions with concrete examples to maintain consistency.
+>
+> **Note:** This template shows React/TypeScript examples. When generating project documentation, the AI will replace ALL code examples with the actual language/framework from your PRD (Python, Go, Rust, etc.). The structure stays the same, but syntax will match your tech stack.
 
 ---
 
@@ -202,24 +204,235 @@ const loadUser = async () => {
 
 ## Testing Patterns
 
-### Unit Test Structure
+### Testing Philosophy
+- **Write tests alongside implementation**, not as an afterthought
+- **Test behavior, not implementation details**
+- **Each feature should have tests before being marked complete**
+- Aim for high coverage on business logic, moderate on UI
+
+### Test File Organization
+```
+src/
+├── services/
+│   ├── user.service.ts
+│   └── user.service.test.ts       # Co-located with source
+├── components/
+│   ├── UserProfile.tsx
+│   └── UserProfile.test.tsx
+└── utils/
+    ├── validation.ts
+    └── validation.test.ts
+```
+
+### Unit Test Structure (Arrange-Act-Assert)
+
+#### ✅ Good - Clear AAA pattern
 ```typescript
 describe('UserService', () => {
   describe('findById', () => {
     it('should return user when found', async () => {
       // Arrange
       const userId = '123';
-      const expectedUser = { id: userId, name: 'Test' };
+      const mockUser = { id: userId, name: 'Test' };
+      jest.spyOn(api, 'get').mockResolvedValue(mockUser);
       
       // Act
       const user = await UserService.findById(userId);
       
       // Assert
-      expect(user).toEqual(expectedUser);
+      expect(user).toEqual(mockUser);
+      expect(api.get).toHaveBeenCalledWith('/users/123');
+    });
+
+    it('should throw NotFoundError when user does not exist', async () => {
+      // Arrange
+      jest.spyOn(api, 'get').mockRejectedValue(new Error('404'));
+      
+      // Act & Assert
+      await expect(UserService.findById('999'))
+        .rejects
+        .toThrow(NotFoundError);
     });
   });
 });
 ```
+
+#### ❌ Bad - Unclear structure, missing edge cases
+```typescript
+it('works', async () => {
+  const user = await UserService.findById('123');
+  expect(user).toBeTruthy();
+});
+```
+
+### Component Testing
+
+#### ✅ Good - Tests user behavior
+```typescript
+describe('UserProfile', () => {
+  it('should display user information after loading', async () => {
+    // Arrange
+    const mockUser = { id: '1', name: 'John', email: 'john@example.com' };
+    jest.spyOn(UserService, 'findById').mockResolvedValue(mockUser);
+    
+    // Act
+    render(<UserProfile userId="1" />);
+    
+    // Assert
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('John')).toBeInTheDocument();
+      expect(screen.getByText('john@example.com')).toBeInTheDocument();
+    });
+  });
+
+  it('should display error message when user not found', async () => {
+    // Arrange
+    jest.spyOn(UserService, 'findById').mockRejectedValue(new NotFoundError());
+    
+    // Act
+    render(<UserProfile userId="999" />);
+    
+    // Assert
+    await waitFor(() => {
+      expect(screen.getByText('User not found')).toBeInTheDocument();
+    });
+  });
+});
+```
+
+#### ❌ Bad - Tests implementation details
+```typescript
+it('should call useState', () => {
+  const spy = jest.spyOn(React, 'useState');
+  render(<UserProfile userId="1" />);
+  expect(spy).toHaveBeenCalled(); // Implementation detail!
+});
+```
+
+### Integration Test Pattern
+
+```typescript
+describe('User Registration Flow', () => {
+  beforeEach(async () => {
+    await clearDatabase();
+  });
+
+  it('should create user and send welcome email', async () => {
+    // Arrange
+    const userData = { email: 'test@example.com', password: 'secure123' };
+    
+    // Act
+    const response = await request(app)
+      .post('/api/users/register')
+      .send(userData);
+    
+    // Assert
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty('id');
+    
+    // Verify user in database
+    const user = await db.users.findByEmail(userData.email);
+    expect(user).toBeDefined();
+    expect(user.emailVerified).toBe(false);
+    
+    // Verify email sent
+    expect(emailService.sendWelcome).toHaveBeenCalledWith(user);
+  });
+});
+```
+
+### What to Test
+
+**High Priority (Always Test):**
+- ✅ Business logic and calculations
+- ✅ Data transformations
+- ✅ API endpoints (request/response)
+- ✅ Error handling paths
+- ✅ Authentication/authorization
+- ✅ Data validation
+
+**Medium Priority (Test When Complex):**
+- ⚠️ Component rendering logic
+- ⚠️ User interactions (clicks, form submissions)
+- ⚠️ State management
+- ⚠️ Routing logic
+
+**Low Priority (Usually Skip):**
+- ❌ Simple getters/setters
+- ❌ Pure UI components with no logic
+- ❌ Third-party library internals
+- ❌ Configuration files
+
+### Test Coverage Guidelines
+
+- **Aim for 80%+ coverage on services/business logic**
+- **Aim for 60%+ coverage on components**
+- **100% coverage is not the goal** - focus on critical paths
+
+### Mocking Best Practices
+
+#### ✅ Good - Mock external dependencies
+```typescript
+// Mock external API
+jest.mock('@/services/external-api', () => ({
+  fetchData: jest.fn()
+}));
+
+// Mock only what you need
+jest.spyOn(UserService, 'findById').mockResolvedValue(mockUser);
+```
+
+#### ❌ Bad - Over-mocking
+```typescript
+// Don't mock everything - test real logic
+jest.mock('@/utils/validation'); // This should be tested, not mocked!
+```
+
+### Test Naming Convention
+
+**Format:** `should [expected behavior] when [condition]`
+
+#### ✅ Good - Descriptive
+```typescript
+it('should return empty array when no users exist', async () => {
+  // ...
+});
+
+it('should throw ValidationError when email is invalid', () => {
+  // ...
+});
+```
+
+#### ❌ Bad - Vague
+```typescript
+it('works', () => {}); 
+it('test user', () => {});
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode (development)
+npm test -- --watch
+
+# Run tests with coverage
+npm test -- --coverage
+
+# Run specific test file
+npm test user.service.test.ts
+```
+
+### Pre-Commit Testing
+
+**Before marking any task complete:**
+- [ ] All existing tests pass
+- [ ] New tests written for new features
+- [ ] Tests cover happy path and error cases
+- [ ] No console errors or warnings in tests
 
 ---
 

@@ -77,6 +77,11 @@ Each implementation file tracks its own features and stages. Later implementatio
 #### 7. Task Completion Checklist
 Before marking ANY task complete, verify ALL of the following:
 - [ ] Feature works as specified (tested manually or with tests)
+- [ ] **Tests written and passing** (see Testing Patterns in coding_standards.md):
+  - [ ] Unit tests for business logic and services
+  - [ ] Component tests for UI with logic
+  - [ ] Integration tests for critical flows (if applicable)
+  - [ ] Tests cover both happy path and error cases
 - [ ] No console errors, warnings, or linter issues
 - [ ] Follows patterns documented in coding_standards.md
 - [ ] Matches contracts in api_contracts.md (if applicable)

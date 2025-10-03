@@ -41,6 +41,7 @@ Used when adding new features or expanding the application.
 - /thoughts/project_structure.md
 - /thoughts/ui_ux.md
 - /thoughts/bug_tracking.md
+- /thoughts/git_workflow.md
 ```
 
 - **If these exist:** Mode 2 (Feature Expansion)
@@ -74,8 +75,9 @@ Read these templates to understand structure:
 - `coding_standards.md`
 - `project_structure.md`
 - `ui_ux.md`
-- `implementation_<n>_<featurename>.md`
 - `bug_tracking.md`
+- `git_workflow.md`
+- `implementation_<n>_<featurename>.md`
 
 #### Mode 2 (Feature Expansion):
 **Tool:** `read_file` on existing documentation + template
@@ -182,16 +184,37 @@ Organize by feature/domain.
 ### 6.3 Create `/thoughts/coding_standards.md`
 **Tool:** `write`
 
-Define project-specific standards with examples:
-- **File Naming:** Conventions for the chosen framework
-- **Code Patterns:** With ❌ Bad and ✅ Good examples
-- **Error Handling:** Specific pattern for this project
-- **Component Structure:** Template for components/modules
-- **Import Ordering:** Specific rules
-- **State Management:** How to manage state in this project
-- **Testing:** Testing patterns and structure
+Define project-specific standards with examples **in the actual language/framework from the PRD**.
 
-**CRITICAL:** Always include ❌ Bad and ✅ Good examples for each pattern.
+**CRITICAL: Adapt all code examples to match the tech stack:**
+- **If React/TypeScript:** Use JSX components, hooks (useState, useEffect), TypeScript interfaces
+- **If Vue:** Use Vue composition API, reactive refs, TypeScript props
+- **If Python/Flask:** Use Python classes, decorators (@app.route), type hints
+- **If Python/Django:** Use Django models, views, serializers
+- **If Node.js/Express:** Use Express middleware, async/await, route handlers
+- **If Go:** Use Go structs, interfaces, goroutines, error handling patterns
+- **If Rust:** Use Rust structs, traits, Result types, borrowing patterns
+- **If Java/Spring:** Use Spring annotations, dependency injection
+- **If CLI tool:** Use argument parsing, stdout/stderr patterns
+- **If data pipeline:** Use ETL patterns, data transformation
+
+**Include sections:**
+- **File Naming:** Conventions for the chosen language/framework
+- **Code Patterns:** With ❌ Bad and ✅ Good examples IN THE PROJECT'S LANGUAGE
+- **Error Handling:** Specific pattern for this language
+- **Module/Component Structure:** Template for main code units
+- **Import Ordering:** Language-specific rules
+- **State/Data Management:** How data flows in this architecture
+- **Testing:** Testing patterns for the chosen test framework (Jest, pytest, Go testing, etc.)
+
+**Example:**
+```
+PRD says "Python + Flask" → All examples use Python syntax
+PRD says "Go API" → All examples use Go syntax
+PRD says "Rust CLI" → All examples use Rust syntax
+```
+
+**Always include ❌ Bad and ✅ Good examples for each pattern in the project's language.**
 
 ### 6.4 Create `/thoughts/project_structure.md`
 **Tool:** `write`
@@ -216,7 +239,34 @@ Define:
 
 Initialize with template structure - this file will be populated during development.
 
-### 6.7 Create `/thoughts/implementation_0_initial.md`
+### 6.7 Create `/thoughts/git_workflow.md`
+**Tool:** `write`
+
+Define version control workflow with **Feature Branch Workflow as the default**.
+
+**Standard configuration (recommended for all projects):**
+- **Branch Strategy:** Feature branches (feature/*, fix/*)
+- **Commit Behavior:** AI commits automatically to feature branches after subtasks
+- **Merge Approval:** Human reviews and approves merge to main
+- **Commit Messages:** Conventional commits format (feat:, fix:, refactor:, etc.)
+- **Tests Required:** Yes, before committing
+- **Push Behavior:** AI asks before pushing
+
+**Include sections:**
+- Branch types and naming conventions
+- Commit message format with good/bad examples
+- When AI commits automatically vs needs approval
+- Workflow examples showing feature branch cycle
+- PR template (if using GitHub/GitLab)
+- Alternative: Direct-to-main workflow (for rapid solo prototyping only)
+
+**Customize if user explicitly requests:**
+- Direct-to-main for very early prototyping
+- Different branch naming conventions
+- Auto-push behavior
+- Team-specific PR requirements
+
+### 6.8 Create `/thoughts/implementation_0_initial.md`
 **Tool:** `write`
 
 This is the MAIN task tracking file. Must include:
@@ -487,7 +537,14 @@ Ensure consistency with existing docs:
 
 ### Mode 1 (Initial Setup)
 After running:
-- ✅ 7 base files created in `/thoughts/`
+- ✅ 8 base files created in `/thoughts/`
+  - architecture_decisions.md
+  - api_contracts.md
+  - coding_standards.md
+  - project_structure.md
+  - ui_ux.md
+  - bug_tracking.md
+  - git_workflow.md
 - ✅ 1 implementation file: `implementation_0_initial.md`
 - ✅ All files are project-specific
 - ✅ Tech stack researched with documentation links
