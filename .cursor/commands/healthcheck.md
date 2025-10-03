@@ -1,17 +1,6 @@
----
-description: Periodic documentation health check to ensure docs stay accurate
-globs:
-alwaysApply: false
----
-# Documentation Health Check Rule
+# Documentation Health Check Command
 
-## When to Use This Rule
-
-**Trigger phrases:**
-- "Run documentation health check"
-- "Check documentation health"
-- "Verify documentation accuracy"
-- "Docs health check"
+## When to Use This Command
 
 **Recommended frequency:**
 - After completing each implementation stage
