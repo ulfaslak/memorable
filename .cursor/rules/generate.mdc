@@ -1,0 +1,558 @@
+---
+description: Rules for generating implementation plans and documentation from PRDs
+globs:
+alwaysApply: false
+---
+# PRD to Documentation Generator
+
+## When to Use This Rule
+
+**Trigger phrases:**
+- "Generate the implementation plan and all documentation from the PRD" (initial setup)
+- "Generate implementation plan from PRD_<n>_<feature>" (feature expansion)
+
+This rule transforms a PRD into implementation documentation.
+
+## Two Modes of Operation
+
+### Mode 1: Initial Setup (n=0)
+**Input:** `docs/implementation/PRD_0_initial.md`
+**Output:** All 7 base documentation files + `implementation_0_initial.md`
+
+Used once at project start to create the foundational documentation.
+
+### Mode 2: Feature Expansion (n>0)
+**Input:** `docs/implementation/PRD_<n>_<feature>.md`
+**Output:** New `implementation_<n>_<feature>.md` + updates to existing docs
+
+Used when adding new features or expanding the application.
+
+---
+
+## Execution Workflow
+
+### Step 0: Detect Mode
+
+**Check if base documentation exists:**
+```
+- /thoughts/architecture_decisions.md
+- /thoughts/api_contracts.md
+- /thoughts/coding_standards.md
+- /thoughts/project_structure.md
+- /thoughts/ui_ux.md
+- /thoughts/bug_tracking.md
+```
+
+- **If these exist:** Mode 2 (Feature Expansion)
+- **If these don't exist:** Mode 1 (Initial Setup)
+
+### Step 1: Identify the PRD
+
+**Tool:** `glob_file_search` or check provided filename
+
+Look for:
+- `docs/implementation/PRD_0_initial.md` (initial)
+- `docs/implementation/PRD_<n>_<feature>.md` (expansion)
+
+Extract:
+- **n** = implementation number
+- **feature** = feature name/description
+
+### Step 2: Read the PRD
+**Tool:** `read_file` on the identified PRD
+
+Read and understand the PRD thoroughly.
+
+### Step 3: Read Context
+
+#### Mode 1 (Initial Setup):
+**Tool:** `read_file` on all templates in `.cursor/rules/templates/`
+
+Read these templates to understand structure:
+- `architecture_decisions.md`
+- `api_contracts.md`
+- `coding_standards.md`
+- `project_structure.md`
+- `ui_ux.md`
+- `implementation_<n>_<featurename>.md`
+- `bug_tracking.md`
+
+#### Mode 2 (Feature Expansion):
+**Tool:** `read_file` on existing documentation + template
+
+Read existing docs to understand current state:
+- `/thoughts/architecture_decisions.md` - Current architecture
+- `/thoughts/api_contracts.md` - Existing APIs
+- `/thoughts/coding_standards.md` - Current patterns
+- `/thoughts/project_structure.md` - Current structure
+- `/thoughts/implementation_0_initial.md` - Original implementation (and any other implementation files)
+- `.cursor/rules/templates/implementation_<n>_<featurename>.md` - Template for new file
+
+**Find all existing implementation files:**
+```
+/thoughts/implementation_0_*.md
+/thoughts/implementation_1_*.md
+etc.
+```
+
+### Step 4: Analyze & Plan
+
+#### Mode 1 (Initial Setup):
+Based on the PRD, determine:
+1. **Features:** Extract all features and categorize (must-have, should-have, nice-to-have)
+2. **Tech Stack:** Research and select appropriate technologies
+3. **Architecture:** Choose architectural patterns (MVC, repository, etc.)
+4. **Data Models:** Identify core data structures
+5. **UI/UX Requirements:** Extract design and UX needs
+6. **Implementation Stages:** Break work into 4 stages (Foundation, Core, Advanced, Polish)
+
+#### Mode 2 (Feature Expansion):
+Based on the new PRD and existing docs:
+1. **New Features:** Extract features from expansion PRD
+2. **Dependencies:** Identify dependencies on existing features (from implementation_0)
+3. **Architecture Impact:** Determine if new architectural decisions needed
+4. **New Data Models:** Identify new APIs, models, interfaces
+5. **New Patterns:** Determine if new coding patterns needed
+6. **Integration Points:** How this integrates with existing implementation
+7. **Implementation Stages:** Break new work into stages (may reference existing foundation)
+
+### Step 5: Research (Mode 1 only)
+**Tool:** `web_search` for current best practices
+
+For each major technology you're recommending:
+- Search for official documentation links
+- Verify it's appropriate for the project scale
+- Consider current best practices (2025)
+
+### Step 6: Create or Update Documentation Files
+
+---
+
+## MODE 1: INITIAL SETUP
+
+### 6.1 Create `/thoughts/architecture_decisions.md`
+**Tool:** `write`
+
+Document each major decision using ADR format:
+```markdown
+## Decision: [Title]
+**Date:** 2025-10-03
+**Status:** Accepted
+**Implementation:** 0 (Initial)
+
+### Context
+[What problem needs solving]
+
+### Decision
+[What you decided]
+
+### Rationale
+- Reason 1
+- Reason 2
+
+### Alternatives Considered
+- **Alternative A:** Why rejected
+
+### Consequences
+- **Positive:** Benefits
+- **Negative:** Trade-offs
+```
+
+Include decisions about:
+- Framework choices (frontend/backend)
+- Database selection
+- Authentication approach
+- State management pattern
+- API design (REST, GraphQL, etc.)
+- Testing strategy
+
+### 6.2 Create `/thoughts/api_contracts.md`
+**Tool:** `write`
+
+Document using TypeScript-style interfaces:
+- **Data Models:** All core entities with fields
+- **API Endpoints:** Request/response schemas
+- **Service Interfaces:** Business logic function signatures
+- **Component Props:** UI component interfaces
+- **Database Schema:** Table structures
+- **Validation Rules:** Input requirements
+
+Organize by feature/domain.
+
+### 6.3 Create `/thoughts/coding_standards.md`
+**Tool:** `write`
+
+Define project-specific standards with examples:
+- **File Naming:** Conventions for the chosen framework
+- **Code Patterns:** With ❌ Bad and ✅ Good examples
+- **Error Handling:** Specific pattern for this project
+- **Component Structure:** Template for components/modules
+- **Import Ordering:** Specific rules
+- **State Management:** How to manage state in this project
+- **Testing:** Testing patterns and structure
+
+**CRITICAL:** Always include ❌ Bad and ✅ Good examples for each pattern.
+
+### 6.4 Create `/thoughts/project_structure.md`
+**Tool:** `write`
+
+Define the folder structure specific to chosen frameworks.
+Include import path aliases configuration.
+
+### 6.5 Create `/thoughts/ui_ux.md`
+**Tool:** `write`
+
+Define:
+- **Color Palette:** Primary, secondary, semantic colors with hex values
+- **Typography:** Font families, sizes, weights
+- **Spacing System:** Consistent spacing units
+- **Components:** Button, Input, Card, etc. with variants
+- **Responsive Breakpoints:** Mobile, tablet, desktop values
+- **Accessibility:** WCAG AA requirements
+- **User Flows:** Key user journeys from PRD
+
+### 6.6 Create `/thoughts/bug_tracking.md`
+**Tool:** `write`
+
+Initialize with template structure - this file will be populated during development.
+
+### 6.7 Create `/thoughts/implementation_0_initial.md`
+**Tool:** `write`
+
+This is the MAIN task tracking file. Must include:
+
+**Header:**
+```markdown
+# Implementation Plan: Initial (0)
+
+**PRD Source:** docs/implementation/PRD_0_initial.md
+**Status:** Not Started
+**Created:** 2025-10-03
+```
+
+**Feature Analysis Section:**
+- List all identified features
+- Categorize: Must-Have, Should-Have, Nice-to-Have
+
+**Tech Stack Section:**
+- List each technology with justification
+- Include documentation links (from web search)
+- Specify versions
+
+**Current Working State Section:**
+```markdown
+## Current Working State
+
+### ✅ Completed
+- Nothing yet
+
+### 🚧 In Progress
+- Nothing yet
+
+### ❌ Not Started
+- All features below
+
+### 🐛 Known Issues
+- See bug_tracking.md
+```
+
+**Implementation Stages:**
+- **Stage 1: Foundation & Setup**
+- **Stage 2: Core Features**
+- **Stage 3: Advanced Features**
+- **Stage 4: Polish & Optimization**
+
+Each stage with:
+- Duration estimate
+- Dependencies
+- Sub-steps with `- [ ]` checkboxes
+
+---
+
+## MODE 2: FEATURE EXPANSION
+
+### 6.1 Update `/thoughts/architecture_decisions.md`
+**Tool:** `search_replace` (append new decisions)
+
+Add new decisions if architecture changes:
+```markdown
+---
+
+## Decision: [New Decision Title]
+**Date:** 2025-10-03
+**Status:** Accepted
+**Implementation:** <n> (<feature>)
+
+### Context
+[What new problem needs solving]
+
+### Decision
+[What was decided for this expansion]
+
+### Rationale
+- How this builds on existing architecture
+- Why this approach for the new feature
+
+### Alternatives Considered
+[...]
+
+### Consequences
+[...]
+
+### Related Decisions
+- References to existing decisions from implementation 0
+```
+
+**Only add new decisions if architectural changes are needed for the new features.**
+
+### 6.2 Update `/thoughts/api_contracts.md`
+**Tool:** `search_replace` (append new contracts)
+
+Add new section for this feature:
+```markdown
+---
+
+## Feature: <feature> (Implementation <n>)
+
+### New Data Models
+[New interfaces/types]
+
+### New API Endpoints
+[New endpoints]
+
+### New Service Interfaces
+[New service methods]
+
+### Integration Points
+- References to existing models from implementation 0
+- How new models relate to existing ones
+```
+
+### 6.3 Update `/thoughts/coding_standards.md` (if needed)
+**Tool:** `search_replace` (append new patterns)
+
+**Only update if:**
+- New feature requires new patterns not yet documented
+- New technology/library introduced
+
+Add new section:
+```markdown
+---
+
+## Patterns for <feature> (Implementation <n>)
+
+### [New Pattern Name]
+
+#### ❌ Bad
+[example]
+
+#### ✅ Good
+[example]
+```
+
+### 6.4 Update `/thoughts/project_structure.md` (if needed)
+**Tool:** `search_replace` (update structure)
+
+**Only update if:**
+- New folders/modules needed
+- Structure changes required
+
+Add note about new directories and where new feature files go.
+
+### 6.5 Update `/thoughts/ui_ux.md` (if needed)
+**Tool:** `search_replace` (append new components/flows)
+
+**Only update if:**
+- New UI components introduced
+- New user flows added
+- Design system expansion
+
+Add section:
+```markdown
+---
+
+## UI for <feature> (Implementation <n>)
+
+### New Components
+[component specs]
+
+### New User Flows
+[flow diagrams]
+```
+
+### 6.6 Create `/thoughts/implementation_<n>_<feature>.md`
+**Tool:** `write`
+
+Create new implementation file:
+
+**Header:**
+```markdown
+# Implementation Plan: <feature> (<n>)
+
+**PRD Source:** docs/implementation/PRD_<n>_<feature>.md
+**Status:** Not Started
+**Created:** 2025-10-03
+**Depends On:** implementation_0_initial.md
+
+## Overview
+[Brief description of what this feature expansion adds]
+```
+
+**Dependencies Section:**
+```markdown
+## Dependencies
+
+### From Implementation 0 (Initial)
+- ✅ Must have: [Required features from impl 0]
+- ⚠️  Modifies: [Existing features this will modify]
+- 🔗 Integrates with: [Integration points]
+```
+
+**Feature Analysis:**
+- New features being added
+- How they relate to existing features
+
+**Current Working State:**
+```markdown
+## Current Working State
+
+### ✅ Completed
+- Nothing yet
+
+### 🚧 In Progress
+- Nothing yet
+
+### ❌ Not Started
+- All features below
+
+### 🐛 Known Issues
+- See bug_tracking.md
+```
+
+**Implementation Stages:**
+- **Stage 1: Foundation** (may reference existing foundation)
+- **Stage 2: Core Features**
+- **Stage 3: Integration** (integrating with existing features)
+- **Stage 4: Polish**
+
+**References:**
+```markdown
+## References
+- Initial Implementation: implementation_0_initial.md
+- Architecture Decisions: See architecture_decisions.md (Implementation <n> decisions)
+- API Contracts: See api_contracts.md (Feature: <feature>)
+- Coding Standards: coding_standards.md
+```
+
+---
+
+## Critical Requirements
+
+### Integration Between Files
+
+#### Mode 1 (Initial Setup):
+Ensure consistency across all 7 base files + implementation_0:
+- architecture_decisions.md decisions align with coding_standards.md patterns
+- api_contracts.md interfaces match coding_standards.md examples
+- implementation_0_initial.md tech stack matches architecture_decisions.md choices
+- All files cross-reference appropriately
+
+#### Mode 2 (Feature Expansion):
+Ensure consistency with existing docs:
+- New decisions reference existing architectural context
+- New API contracts integrate with existing models
+- New patterns extend (not contradict) existing patterns
+- implementation_<n>_<feature>.md explicitly references implementation_0_initial.md dependencies
+- Changes to base docs are appended, not replaced (preserve history)
+
+### Naming Convention
+
+**PRDs:**
+- `docs/implementation/PRD_0_initial.md`
+- `docs/implementation/PRD_1_payments.md`
+- `docs/implementation/PRD_2_notifications.md`
+
+**Implementation Plans:**
+- `/thoughts/implementation_0_initial.md`
+- `/thoughts/implementation_1_payments.md`
+- `/thoughts/implementation_2_notifications.md`
+
+**Pattern:** `implementation_<n>_<feature>.md` where:
+- `<n>` is sequential integer (0, 1, 2, ...)
+- `<feature>` is short, descriptive, lowercase with underscores
+
+---
+
+## Success Criteria
+
+### Mode 1 (Initial Setup)
+After running:
+- ✅ 7 base files created in `/thoughts/`
+- ✅ 1 implementation file: `implementation_0_initial.md`
+- ✅ All files are project-specific
+- ✅ Tech stack researched with documentation links
+- ✅ All PRD features mapped to implementation stages
+- ✅ Can answer: "What should I build first?"
+
+### Mode 2 (Feature Expansion)
+After running:
+- ✅ 1 new implementation file: `implementation_<n>_<feature>.md`
+- ✅ Relevant base docs updated (only those that need updates)
+- ✅ Dependencies on implementation_0 clearly documented
+- ✅ Integration points identified
+- ✅ New features mapped to stages
+- ✅ Can answer: "How does this integrate with existing features?"
+
+---
+
+## After Generation
+
+### Initial Setup (Mode 1):
+1. This rule's job is done for initial setup
+2. workflow.mdc takes over for building implementation_0
+3. This rule can be invoked again for feature expansions
+
+### Feature Expansion (Mode 2):
+1. workflow.mdc continues, now with multiple implementation files to track
+2. This rule can be invoked again for additional expansions
+3. Each expansion gets its own implementation_<n>_<feature>.md
+
+### Documentation Growth:
+- Base docs (architecture_decisions, api_contracts, etc.) grow over time
+- Each implementation file tracks its own features
+- Clear lineage from PRD → implementation → code
+
+---
+
+## Examples
+
+### Initial Setup:
+```
+User: "Generate the implementation plan and all documentation from the PRD"
+AI: [Reads PRD_0_initial.md, creates all 7 base docs + implementation_0_initial.md]
+```
+
+### First Expansion:
+```
+User: Creates docs/implementation/PRD_1_payments.md
+User: "Generate implementation plan from PRD_1_payments"
+AI: [Reads PRD_1_payments.md + existing docs, creates implementation_1_payments.md, updates relevant base docs]
+```
+
+### Second Expansion:
+```
+User: Creates docs/implementation/PRD_2_notifications.md
+User: "Generate implementation plan from PRD_2_notifications"
+AI: [Creates implementation_2_notifications.md, updates base docs as needed]
+```
+
+---
+
+## Quality Standards
+- **Be specific:** Use actual technology names, not placeholders
+- **Include links:** Real documentation URLs (Mode 1)
+- **Show examples:** Concrete code examples, not abstract descriptions
+- **Be realistic:** Achievable time estimates and task granularity
+- **Be comprehensive:** Cover all PRD features in appropriate stages
+- **Maintain continuity:** Mode 2 builds on Mode 1, doesn't contradict it
+- **Clear dependencies:** Explicitly state what from previous implementations is required

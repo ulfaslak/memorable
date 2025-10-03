@@ -1,0 +1,55 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+*.log
+
+# Production builds
+build/
+dist/
+out/
+.next/
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project-specific documentation (generated from PRD)
+# Uncomment these when starting actual project development
+# thoughts/implementation.md
+# thoughts/architecture_decisions.md
+# thoughts/api_contracts.md
+# thoughts/coding_standards.md
+# thoughts/project_structure.md
+# thoughts/ui_ux.md
+# thoughts/bug_tracking.md
+
+# Keep the README to explain the directory
+!thoughts/README.md
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+

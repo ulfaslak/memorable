@@ -1,0 +1,172 @@
+---
+alwaysApply: true
+---
+# Development Agent Workflow - Cursor Rules
+
+## Primary Directive
+You are a development agent implementing a project. Follow established documentation and maintain consistency. Documentation files persist while chat context degrades - always refer to documentation as the source of truth.
+
+## Implementation File Structure
+
+The project may have multiple implementation plans:
+- `/thoughts/implementation_0_initial.md` - Initial implementation (always exists)
+- `/thoughts/implementation_<n>_<feature>.md` - Feature expansions (may exist)
+
+Each implementation file tracks its own features and stages. Later implementations may depend on earlier ones.
+
+## Core Workflow Process
+
+### Before Starting Any Task
+
+1. **Identify Active Implementation:**
+   - Check which implementation file(s) exist in `/thoughts/`
+   - If user specified a feature (e.g., "work on payments"), find the corresponding implementation file
+   - If not specified, check "Current Working State" in each file to find incomplete work
+   - Default to the lowest-numbered incomplete implementation
+
+2. **Consult Implementation Plan:**
+   - Read the active `/thoughts/implementation_<n>_<feature>.md` for current stage and available tasks
+   - Check task dependencies and prerequisites
+   - If dependencies reference another implementation (e.g., implementation_0), ensure those are complete
+
+3. **Review Architectural Context:**
+   - Review relevant decisions in `/thoughts/architecture_decisions.md`
+   - Note which implementation number the relevant decisions belong to
+
+### Task Execution Protocol
+
+#### 1. Task Assessment
+- Read subtask from the active `/thoughts/implementation_<n>_<feature>.md`
+- Check "Current Working State" section to understand what's already functional in THIS implementation
+- If task depends on another implementation, check that implementation's "Current Working State"
+- **When starting a new task:** Update "Current Working State" to move task from "❌ Not Started" to "🚧 In Progress"
+- Assess subtask complexity:
+  - **Simple subtask:** Implement directly
+  - **Complex subtask:** Create a todo list
+
+#### 2. Architecture & Pattern Verification
+- Check `/thoughts/architecture_decisions.md` for relevant architectural patterns
+  - Note which implementation number decisions belong to
+  - Ensure you're following decisions relevant to current implementation
+- Review `/thoughts/coding_standards.md` for project-specific patterns
+  - Patterns may be organized by implementation/feature
+- Verify against `/thoughts/api_contracts.md` if working with existing interfaces
+  - Check both existing contracts (from impl 0) and new contracts (from current impl)
+
+#### 3. Documentation Research
+- Check the active `/thoughts/implementation_<n>_<feature>.md` for relevant documentation links in the subtask
+- If implementing a feature that depends on implementation_0, also reference that file
+- Read and understand documentation before implementing
+
+#### 4. UI/UX Implementation
+- Consult `/thoughts/ui_ux.md` before implementing any UI/UX elements
+- Follow design system specifications and responsive requirements
+
+#### 5. Project Structure Compliance
+- Check `/thoughts/project_structure.md` before:
+  - Running commands
+  - Creating files/folders
+  - Making structural changes
+  - Adding dependencies
+
+#### 6. Error Handling
+- Check `/thoughts/bug_tracking.md` for similar issues before fixing
+- Document all errors and solutions in bug_tracking.md
+- Include error details, root cause, and resolution steps
+
+#### 7. Task Completion Checklist
+Before marking ANY task complete, verify ALL of the following:
+- [ ] Feature works as specified (tested manually or with tests)
+- [ ] No console errors, warnings, or linter issues
+- [ ] Follows patterns documented in coding_standards.md
+- [ ] Matches contracts in api_contracts.md (if applicable)
+- [ ] Code structure aligns with project_structure.md
+- [ ] UI/UX matches specifications in ui_ux.md (if applicable)
+- [ ] **Checked the checkbox** in implementation file (change `- [ ]` to `- [x]`)
+- [ ] **Updated "Current Working State"** section in the active implementation_<n>_<feature>.md
+  - Move completed feature from "❌ Not Started" or "🚧 In Progress" to "✅ Completed"
+- [ ] Dependencies updated in the active implementation file if applicable
+- [ ] If task completes a dependency for another implementation, note that
+- [ ] All todo list items completed (if applicable)
+
+**Do NOT mark tasks complete based on optimism - verify each checkbox.**
+
+**To mark a task complete:**
+1. Use `search_replace` tool to change `- [ ] Task description` to `- [x] Task description` in the implementation file
+2. Use `search_replace` tool to update the "Current Working State" section
+3. Verify all checklist items above are satisfied
+
+### File Reference Priority
+1. `/thoughts/architecture_decisions.md` - Why decisions were made, core patterns
+2. `/thoughts/bug_tracking.md` - Check for known issues first
+3. **Active** `/thoughts/implementation_<n>_<feature>.md` - Current task reference and state
+4. **Referenced** `/thoughts/implementation_<m>_<other>.md` - Dependency implementations
+5. `/thoughts/coding_standards.md` - Patterns, conventions, examples
+6. `/thoughts/api_contracts.md` - Function signatures, data models, interfaces
+7. `/thoughts/project_structure.md` - Structure guidance
+8. `/thoughts/ui_ux.md` - Design requirements
+
+## Context Refresh Protocol
+**When context seems lost or you're uncertain about project patterns:**
+1. Identify all implementation files in `/thoughts/` (list them)
+2. Read `/thoughts/architecture_decisions.md` completely
+3. Read current stage and "Current Working State" in the active implementation file
+4. Read "Current Working State" in implementation_0_initial.md to understand foundation
+5. Review relevant sections of `/thoughts/coding_standards.md`
+6. Check `/thoughts/api_contracts.md` for interface definitions
+7. Review recent entries in `/thoughts/bug_tracking.md`
+8. Verify against `/thoughts/project_structure.md` before proceeding
+
+**Trigger context refresh when:**
+- Unsure about which pattern to use
+- Can't remember why a decision was made
+- About to create a new architectural pattern
+- Noticing inconsistency with earlier code
+- Starting work after a long break in conversation
+- Switching between different feature implementations
+
+## Critical Rules
+- **NEVER** skip documentation consultation
+- **NEVER** mark tasks complete without verifying the completion checklist
+- **NEVER** ignore project structure guidelines
+- **NEVER** implement UI without checking ui_ux.md
+- **NEVER** fix errors without checking bug_tracking.md first
+- **NEVER** create new patterns without checking architecture_decisions.md and coding_standards.md
+- **NEVER** modify APIs/interfaces without checking api_contracts.md
+- **ALWAYS** document errors and solutions
+- **ALWAYS** follow the established workflow process
+- **ALWAYS** update "Current Working State" when completing features
+- **ALWAYS** prefer documented patterns over improvisation
+
+## Documentation Updates
+When making significant changes:
+- Update `/thoughts/architecture_decisions.md` for new architectural decisions
+  - Tag with implementation number (e.g., "Implementation: 1 (payments)")
+- Update `/thoughts/api_contracts.md` for new interfaces or data models
+  - Organize by feature/implementation
+- Update `/thoughts/coding_standards.md` for new patterns worth following
+  - Note which implementation introduced the pattern
+- Update "Current Working State" in the active `/thoughts/implementation_<n>_<feature>.md`
+
+## Working with Multiple Implementations
+
+### Switching Between Features
+When user says "work on [feature]":
+1. Find the corresponding `/thoughts/implementation_<n>_<feature>.md`
+2. Check its dependencies (may reference other implementation documents)
+3. Verify dependencies are met before starting work
+4. Follow that implementation plan
+
+### Dependencies Between Implementations
+- Implementation 0 (initial) is the foundation - others depend on it
+- Later implementations may depend on specific features from implementation 0
+- Always check "Dependencies" section in implementation files
+- Don't start a feature if its dependencies aren't marked complete
+
+### Completing an Implementation
+When all tasks in an implementation_<n>_<feature>.md are complete:
+- Mark the implementation status as "Completed" in the header
+- Note completion date
+- Update any other implementations that depended on this one
+
+Remember: Build a cohesive, well-documented, and maintainable project. Every decision should support overall project goals and maintain consistency with established patterns. When in doubt, check the documentation - it persists while chat context fades.
