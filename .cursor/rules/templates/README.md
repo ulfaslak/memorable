@@ -11,6 +11,10 @@ These templates serve as:
 
 ## Templates Available
 
+### PRD Template
+- **`PRD_template.md`** - Comprehensive Product Requirements Document template
+
+### Implementation Documentation Templates
 - **`implementation_\<n\>_\<feature\>.md`** - Implementation stages, tasks, and progress tracking
 - **`architecture_decisions.md`** - ADR (Architecture Decision Record) format
 - **`api_contracts.md`** - API endpoints, data models, and interfaces
@@ -18,11 +22,21 @@ These templates serve as:
 - **`project_structure.md`** - File and folder organization
 - **`ui_ux.md`** - Design system and UX specifications
 - **`bug_tracking.md`** - Error logging and resolution format
+- **`git_workflow.md`** - Version control workflow and commit guidelines
+
+### Output Templates (Not Generated as Base Docs)
+- **`docs_health_check.md`** - Template for health check reports (created when running documentation verification)
 
 ## How They're Used
 
-When the `generate.mdc` rules are invoked:
+### PRD Template
+When `generate_PRD.mdc` is invoked:
+1. AI uses this as a structure guide for comprehensive PRDs
+2. User answers ~30 questions about their project
+3. AI generates a filled PRD in `/docs/implementation/PRD_0_initial.md`
 
+### Implementation Documentation Templates
+When `generate_implementation.mdc` is invoked:
 1. AI reads these templates to understand structure and format
 2. AI creates **NEW** project-specific files in `/thoughts/`
 3. Templates are filled with content from the PRD and architectural decisions
@@ -48,10 +62,10 @@ Update these templates to benefit future projects!
 
 This repo serves as a starter kit for building apps with AI assistance. When starting a new project:
 
-1. Copy this entire repository structure
-2. Replace the PRD with your project's PRD
-3. Run the generate rules to create project-specific documentation
-4. Begin development using the workflow rules
+1. **Clone this repository** structure
+2. **Generate PRD**: Say "Generate a PRD" → Answer questions → PRD created
+3. **Generate implementation**: Say "Generate implementation plan from @PRD_0_initial.md" → 9 doc files created
+4. **Begin development**: AI follows workflow rules and established patterns
 
 The templates ensure consistency and completeness across all your AI-assisted projects.
 

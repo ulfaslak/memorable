@@ -37,13 +37,14 @@ Thumbs.db
 
 # Project-specific documentation (generated from PRD)
 # Uncomment these when starting actual project development
-# thoughts/implementation.md
+# thoughts/implementation_*_*.md
 # thoughts/architecture_decisions.md
 # thoughts/api_contracts.md
 # thoughts/coding_standards.md
 # thoughts/project_structure.md
 # thoughts/ui_ux.md
 # thoughts/bug_tracking.md
+# thoughts/git_workflow.md
 
 # Keep the README to explain the directory
 !thoughts/README.md

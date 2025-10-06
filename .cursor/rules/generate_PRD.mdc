@@ -1,0 +1,331 @@
+---
+description: Interactive quiz to generate a comprehensive PRD from user input
+globs:
+alwaysApply: false
+---
+# PRD Generation Through Interactive Questioning
+
+## When to Use This Rule
+
+**Trigger phrases:**
+- "Generate a PRD"
+- "Create a product requirements document"
+- "I want to create a PRD for my project"
+- "Help me write a PRD"
+
+This rule guides the user through creating a comprehensive Product Requirements Document through Socratic questioning.
+
+---
+
+## Execution Protocol
+
+### Phase 1: Initial Context Gathering
+
+**Step 1.1: Get the elevator pitch**
+
+Ask the user:
+> "Let's create a comprehensive PRD for your project. First, describe your application idea in 2-3 sentences. What is it, who is it for, and what problem does it solve?"
+
+Wait for response. Capture the core concept.
+
+**Step 1.2: Identify project type**
+
+Based on their description, determine if it's:
+- Web application (frontend + backend)
+- Mobile application
+- Desktop application
+- CLI tool
+- Browser extension
+- API/Backend service
+- Data pipeline
+- Other
+
+If unclear, ask:
+> "Is this a [guessed type], or something else?"
+
+---
+
+### Phase 2: Systematic Questioning (One at a Time)
+
+**CRITICAL: Ask ONE question at a time. Wait for answer before proceeding.**
+
+Ask questions in order, adapting based on previous answers:
+
+#### 2.1 Core Purpose & Users
+
+1. **Target users:**
+   > "Who exactly will use this? Be specific about demographics, roles, or user types."
+
+2. **Core problem:**
+   > "What specific problem or pain point does this solve for them?"
+
+3. **Value proposition:**
+   > "Why would users choose this over existing solutions (or doing nothing)?"
+
+#### 2.2 MVP Scope
+
+4. **Must-have features:**
+   > "What are the 3-5 absolutely essential features for the MVP? What can't you launch without?"
+
+5. **Explicitly out of scope:**
+   > "What features or capabilities are you explicitly NOT building in the MVP?"
+
+6. **Success criteria:**
+   > "How will you know the MVP is successful? What metrics or outcomes matter?"
+
+#### 2.3 User Experience
+
+7. **Entry point:**
+   > "How does a new user first discover and start using the application?"
+
+8. **Main workflow:**
+   > "Walk me through the core user workflow step by step. What's the main thing users will do?"
+
+9. **UI expectations:**
+   > "Describe the user interface. Is it minimal/clean, information-dense, playful, professional? Any specific UX requirements?"
+
+10. **Mobile/responsive:**
+    > "Does this need to work on mobile? What devices/screen sizes are important?"
+
+#### 2.4 Technical Architecture
+
+11. **Frontend technology (if applicable):**
+    > "What frontend framework/technology do you want to use? (e.g., React, Vue, Svelte, plain HTML/CSS, Flutter, React Native, etc.) Or do you have a strong preference?"
+
+12. **Backend technology:**
+    > "What backend technology/framework? (e.g., FastAPI, Django, Express, Go, Rust, Rails, etc.) Or should I recommend based on your needs?"
+
+13. **Database:**
+    > "What type of data storage? (e.g., PostgreSQL, MongoDB, SQLite, Redis, etc.) Or should I recommend?"
+
+14. **Authentication:**
+    > "How should users authenticate? (e.g., email/password, magic link, OAuth/social login, no auth needed)"
+
+15. **Hosting/deployment:**
+    > "Where will this run? (e.g., cloud provider, self-hosted, desktop app, extension store, etc.)"
+
+#### 2.5 Data & Logic
+
+16. **Core data entities:**
+    > "What are the main 'things' (entities/objects) your app manages? (e.g., users, posts, tasks, orders, etc.)"
+
+17. **Relationships:**
+    > "How do these entities relate to each other?"
+
+18. **Business logic:**
+    > "Are there any complex rules, calculations, or workflows I should know about?"
+
+#### 2.6 Integrations & External Services
+
+19. **Third-party services:**
+    > "Do you need to integrate with any external services? (e.g., payment processing, email, SMS, analytics, AI/LLMs, etc.)"
+
+20. **APIs:**
+    > "Does your app need to provide an API for others to use? Or consume external APIs?"
+
+#### 2.7 Non-Functional Requirements
+
+21. **Performance:**
+    > "Are there specific performance requirements? (e.g., page load times, API response times, throughput)"
+
+22. **Security:**
+    > "Any specific security or compliance requirements? (e.g., GDPR, HIPAA, SOC2, data encryption)"
+
+23. **Scale:**
+    > "Expected number of users? Concurrent users? Data volume?"
+
+#### 2.8 Testing & Quality
+
+24. **Testing approach:**
+    > "What level of testing do you want? (e.g., comprehensive unit tests, integration tests, E2E tests, or minimal testing for MVP)"
+
+25. **Quality standards:**
+    > "Any code quality requirements? (e.g., linting, type safety, documentation coverage)"
+
+#### 2.9 Design & Branding
+
+26. **Design system:**
+    > "Do you have specific design preferences? (e.g., color palette, modern/minimal, specific UI library like Tailwind, Material, etc.)"
+
+27. **Accessibility:**
+    > "What accessibility level? (e.g., WCAG AA compliance, keyboard navigation, screen reader support)"
+
+#### 2.10 Business Model (if applicable)
+
+28. **Monetization:**
+    > "Is this free, paid, freemium, subscription? How does it make money (or is it internal/non-commercial)?"
+
+29. **Billing:**
+    > "If paid, what payment provider? (e.g., Stripe, PayPal, etc.) Any specific billing requirements?"
+
+#### 2.11 Additional Context
+
+30. **Timeline:**
+    > "What's your timeline? When do you need the MVP?"
+
+31. **Team:**
+    > "Who's building this? Just you, or a team? Any specific expertise to leverage or gaps to fill?"
+
+32. **Known risks:**
+    > "Any technical challenges, dependencies, or risks you're already aware of?"
+
+33. **Open questions:**
+    > "What questions or uncertainties do you still have about the project?"
+
+---
+
+### Phase 3: Clarification & Deep Dives
+
+After the systematic questions, review the answers and ask follow-up questions for:
+
+- **Ambiguities:** Anything unclear or contradictory
+- **Missing details:** Gaps in critical areas
+- **Technical specifics:** If tech stack needs refinement
+- **Edge cases:** Important scenarios not covered
+
+Ask 2-5 clarifying questions based on what's needed.
+
+---
+
+### Phase 4: PRD Generation
+
+**Step 4.1: Synthesize information**
+
+Internally organize all gathered information into PRD structure:
+- Summary from elevator pitch
+- Goals from must-haves and success criteria
+- Non-goals from out-of-scope items
+- User flows from workflow descriptions
+- Functional requirements from features
+- Non-functional requirements from performance/security/scale
+- Architecture from tech stack decisions
+- Data models from entities and relationships
+- APIs from integration needs
+- UI specs from UX descriptions
+- Metrics from success criteria
+- Tech stack locked in from technology choices
+
+**Step 4.2: Generate comprehensive PRD**
+
+Using the `/.cursor/rules/templates/PRD_template.md` as structure guide:
+
+1. Read the template to understand format
+2. Fill in ALL sections with user's information
+3. Be specific and detailed - use concrete examples
+4. Add requirement IDs (FR-X1, NFR-Y1, AC-Z1)
+5. Include acceptance criteria for testability
+6. Document open questions if any remain
+7. Make sure architecture and tech stack are fully specified
+
+**Step 4.3: Save PRD**
+
+Write the complete PRD to:
+```
+/docs/implementation/PRD_0_initial.md
+```
+
+**Step 4.4: Present to user**
+
+Tell the user:
+> "I've generated a comprehensive PRD and saved it to `docs/implementation/PRD_0_initial.md`. 
+> 
+> The document includes:
+> - [List key sections]
+> - [Highlight any open questions]
+> - [Note any assumptions made]
+>
+> Please review it. Once you're satisfied, you can proceed to generate the implementation plan by saying:
+> 
+> 'Generate the implementation plan and all documentation from @PRD_0_initial.md'"
+
+---
+
+## Questioning Best Practices
+
+### Adaptive Questioning
+
+- **If user gives detailed answer:** Acknowledge and move on
+- **If user gives vague answer:** Ask for clarification immediately
+- **If user says "I don't know":** Offer 2-3 common options and recommend one
+- **If user defers to AI:** Make reasonable assumption and confirm
+
+### Example Exchanges
+
+**Good - Specific answer:**
+```
+AI: "What backend technology/framework?"
+User: "FastAPI with Python 3.11"
+AI: "Great. What type of data storage?"
+```
+
+**Handling vague answer:**
+```
+AI: "What are the 3-5 essential features for MVP?"
+User: "User management and the main feature"
+AI: "Let's be more specific. By 'user management' do you mean: (a) just login/logout, (b) full profiles with settings, or (c) something else? And what exactly is 'the main feature'?"
+```
+
+**Handling "I don't know":**
+```
+AI: "What backend technology/framework?"
+User: "I'm not sure, what do you recommend?"
+AI: "Based on your project (web app with real-time features), I'd recommend:
+- FastAPI (Python) - great for rapid development, good async support
+- Express (Node/TypeScript) - excellent for real-time, large ecosystem
+- Go - if performance is critical
+Which direction appeals to you, or shall I choose FastAPI for versatility?"
+```
+
+---
+
+## Quality Standards for Generated PRD
+
+The final PRD must:
+
+- ✅ Be 300+ lines (comprehensive, not superficial)
+- ✅ Have concrete examples, not generic placeholders
+- ✅ Include specific technologies with versions
+- ✅ Define clear acceptance criteria
+- ✅ Document data models in actual code syntax
+- ✅ Specify API endpoints if applicable
+- ✅ Include both functional and non-functional requirements
+- ✅ Address security, testing, and deployment
+- ✅ Be actionable - a developer could build from it
+
+---
+
+## After PRD Generation
+
+Remind the user:
+
+1. **Review the PRD** - make sure it captures their vision
+2. **Edit if needed** - they can modify the file directly
+3. **Next step** - generate implementation plan:
+   > "Generate the implementation plan and all documentation from @PRD_0_initial.md"
+
+---
+
+## Example Opening
+
+When rule is triggered:
+
+> "I'll help you create a comprehensive Product Requirements Document through a series of questions. This will take about 5-10 minutes, but the result will be a detailed specification that can be directly converted into an implementation plan.
+>
+> Let's start with the big picture:
+>
+> **Describe your application idea in 2-3 sentences.** What is it, who is it for, and what problem does it solve?"
+
+Then proceed with systematic questioning, one question at a time.
+
+---
+
+## Notes
+
+- **Patience is key** - Don't rush through questions
+- **One question at a time** - Wait for user response before next question
+- **Adapt based on answers** - Skip irrelevant questions (e.g., don't ask about mobile if it's a CLI tool)
+- **Be specific** - Push for concrete details, not vague descriptions
+- **Offer help** - If user is stuck, provide options or recommendations
+- **Confirm assumptions** - If you make a choice for them, state it clearly
+
+The goal is a PRD so detailed and specific that generating the implementation plan becomes straightforward.

@@ -50,7 +50,29 @@ Each PRD is transformed by the AI into an implementation plan (stored in `/thoug
 
 ## Creating a PRD
 
-### Option 1: Write Manually
+### Option 1: Use Built-in PRD Generator (Recommended)
+
+**For initial MVP (PRD_0_initial.md):**
+
+In Cursor, say:
+```
+"Generate a PRD"
+```
+
+The AI will:
+- Interview you with ~30 detailed questions (one at a time)
+- Cover all aspects: features, UX, tech stack, data models, APIs, security, testing, deployment
+- Generate a comprehensive PRD saved to `docs/implementation/PRD_0_initial.md`
+
+**For feature expansions (PRD_1_feature.md, PRD_2_feature.md, etc.):**
+
+Same process, but focus questions on the new feature and how it integrates with existing functionality.
+
+### Option 2: Use Template
+
+Use `.cursor/rules/templates/PRD_template.md` as a guide and fill in all sections with your project details.
+
+### Option 3: Write from Scratch
 
 Create a detailed document covering:
 - Purpose and vision
@@ -60,15 +82,9 @@ Create a detailed document covering:
 - Technical requirements
 - Design preferences
 - Success metrics
-
-### Option 2: Generate with AI (Recommended)
-
-1. Start a chat with an AI and say:
-   > "I am making the following application: <expanded-elevator-pitch>. I want you to generate a highly detailed PRD for the [MVP/feature]. In order to do this, you must first understand the application fully, covering all key aspects of how the application will work, including but not limited to: purpose, UX, design, features, and tech stack. Please quiz me on these details, one question at a time, until you have a complete understanding of the application. Once you have a complete understanding, generate a PRD."
-
-2. Answer the questions thoroughly
-
-3. Paste the generated PRD into `docs/implementation/PRD_<n>_<feature>.md`
+- Data models and APIs
+- Security and compliance
+- Testing and deployment
 
 ## Best Practices
 

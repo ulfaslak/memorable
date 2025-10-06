@@ -29,17 +29,23 @@ This starter kit uses Cursor's rules system to:
 ```
 your-project/
 ├── .cursor/
-│   └── rules/
-│       ├── workflow.mdc                        # Always-on development rules
-│       ├── generate.mdc                        # PRD → documentation generator
-│       └── templates/                          # Documentation templates
-│           ├── implementation_\<n\>_\<feature\>.md
-│           ├── architecture_decisions.md
-│           ├── api_contracts.md
-│           ├── coding_standards.md
-│           ├── project_structure.md
-│           ├── ui_ux.md
-│           └── bug_tracking.md
+│   ├── rules/
+│   │   ├── workflow.mdc                        # Always-on development rules
+│   │   ├── generate_PRD.mdc                    # Interactive PRD generator
+│   │   ├── generate_implementation.mdc         # PRD → documentation generator
+│   │   └── templates/                          # Documentation templates
+│   │       ├── implementation_\<n\>_\<feature\>.md
+│   │       ├── architecture_decisions.md
+│   │       ├── api_contracts.md
+│   │       ├── coding_standards.md
+│   │       ├── project_structure.md
+│   │       ├── ui_ux.md
+│   │       ├── bug_tracking.md
+│   │       └── git_workflow.md
+│   └── commands/
+│       └── healthcheck.md                      # Documentation health check
+├── .github/
+│   └── workflows/                              # CI/CD workflows (optional)
 ├── docs/
 │   └── implementation/                         # PRD storage
 │       ├── PRD_0_initial.md                   # Initial MVP requirements
@@ -69,12 +75,22 @@ cd your-project-name
 
 ### 2. Create Your Initial PRD
 
-Create `docs/implementation/PRD_0_initial.md` with your MVP requirements. This document should be as detailed as possible, covering all key aspects of how the application should work. I recommend generating this document using AI, in the following way:
+**Option A: Use Built-in PRD Generator (Recommended)**
 
-1. Start a chat with an AI and say:
-    > "I am making the following application: \<expanded-elevator-pitch\>. I want you to generate a highly detailed PRD for the MVP. In order to do this, you must first understand the application fully, covering all key aspects of how the application will work, including but not limited to: purpose, UX, design, features, and tech stack. Please quiz me on these details, one question at a time, until you have a complete understanding of the application. Once you have a complete understanding, generate a PRD for the MVP."
-2. Take the quiz, and answer the questions as truthfully and detailed as possible. Add any important details you can think of.
-3. Paste the generated PRD into `docs/implementation/PRD_0_initial.md`.
+In Cursor, start a chat and say:
+
+> "Generate a PRD"
+
+The AI will:
+- Quiz you with detailed questions about your app (one at a time)
+- Cover: features, UX, tech stack, data models, APIs, security, etc.
+- Generate a comprehensive PRD in `docs/implementation/PRD_0_initial.md`
+
+This takes 5-10 minutes but produces a highly detailed specification.
+
+**Option B: Write Manually**
+
+Use the template at `.cursor/rules/templates/PRD_template.md` and fill it in with your project details.
 
 ### 3. Generate Documentation
 
@@ -91,7 +107,7 @@ The AI will:
 - Document APIs and data models
 - Establish coding standards
 
-This creates **9 documentation files**:
+This creates **8 documentation files**:
 - `implementation_0_initial.md` - MVP task tracking
 - `architecture_decisions.md` - Why decisions were made
 - `api_contracts.md` - API schemas and interfaces
@@ -205,7 +221,17 @@ Guides AI through development:
 - **When uncertain:** Trigger context refresh
 - **Multiple implementations:** Handles dependencies between feature sets
 
-### `generate.mdc` (Manual Activation)
+### `generate_PRD.mdc` (Manual Activation)
+
+Interactive quiz that generates a comprehensive PRD through Socratic questioning.
+
+**Usage:**
+- Say: "Generate a PRD" or "Create a product requirements document"
+- AI asks questions one at a time about your app
+- Covers: features, UX, tech stack, data models, APIs, etc.
+- Generates detailed PRD in `docs/implementation/PRD_0_initial.md`
+
+### `generate_implementation.mdc` (Manual Activation)
 
 **Two Modes:**
 1. **Initial Setup (Mode 1):** Creates all base docs + implementation_0_initial.md
