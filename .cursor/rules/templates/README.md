@@ -1,6 +1,6 @@
 # Documentation Templates
 
-This directory contains template files for generating project-specific documentation in the `/thoughts/` directory.
+This directory contains template files for generating project-specific documentation in (primarily) the `/thoughts/` directory, and the `/docs/implementation/` directory.
 
 ## Purpose
 
